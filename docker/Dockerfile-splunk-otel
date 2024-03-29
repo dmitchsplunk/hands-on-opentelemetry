@@ -1,0 +1,9 @@
+FROM python:3.9
+ADD app.py .
+RUN pip install flask
+RUN pip install "splunk-opentelemetry[all]"
+RUN splunk-py-trace-bootstrap
+ENV OTEL_SERVICE_NAME=dice-server
+ENV OTEL_RESOURCE_ATTRIBUTES='deployment.environment=otel-derek'
+EXPOSE 8080
+CMD ["splunk-py-trace", "flask", "run", "-p", "8080"]
