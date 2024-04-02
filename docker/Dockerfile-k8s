@@ -1,0 +1,8 @@
+FROM python:3.9
+ADD app.py .
+RUN pip install flask
+RUN pip install "splunk-opentelemetry[all]"
+RUN splunk-py-trace-bootstrap
+EXPOSE 8080
+# ensure our flask server is visible from the network (not just localhost)
+CMD ["splunk-py-trace", "flask", "run", "--host", "0.0.0.0", "-p", "8080"]
